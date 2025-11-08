@@ -12,9 +12,6 @@ twilio==8.10.0
 groq==0.33.0
 google-generativeai==0.8.5
 
-# Audio Processing
-pydub==0.25.1
-
 # Image Processing
 Pillow>=10.0.0
 

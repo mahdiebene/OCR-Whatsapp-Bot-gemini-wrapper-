@@ -20,7 +20,6 @@ import requests
 # Free AI alternatives
 import groq  # Free LLM API
 import google.generativeai as genai  # Google Gemini for images
-from pydub import AudioSegment
 from PIL import Image
 
 # Configuration
@@ -133,34 +132,25 @@ class WhatsAppBotFree:
             Transcribed text
         """
         try:
-            # Save audio temporarily
+            # Save audio temporarily - Groq supports ogg, mp3, wav, m4a, flac directly
             temp_audio_path = f"{UPLOAD_FOLDER}/temp_audio.{audio_format}"
             with open(temp_audio_path, 'wb') as f:
                 f.write(audio_data)
             
-            # Convert to supported format if needed (Groq supports mp3, wav, m4a, etc.)
-            supported_formats = ['mp3', 'wav', 'm4a', 'flac']
-            if audio_format not in supported_formats:
-                audio = AudioSegment.from_file(temp_audio_path, format=audio_format)
-                mp3_path = f"{UPLOAD_FOLDER}/temp_audio.mp3"
-                audio.export(mp3_path, format='mp3')
-                temp_audio_path = mp3_path
-            
             # Use Groq's Whisper for transcription (FREE!)
+            # Groq Whisper supports: flac, mp3, mp4, mpeg, mpga, m4a, ogg, wav, webm
             with open(temp_audio_path, 'rb') as audio_file:
                 transcription = self.groq_client.audio.transcriptions.create(
-                    file=audio_file,
+                    file=(f"audio.{audio_format}", audio_file, f"audio/{audio_format}"),
                     model="whisper-large-v3",  # Free on Groq!
-                    language="en"  # Remove this to auto-detect
+                    response_format="text"
                 )
             
             # Clean up
             if os.path.exists(temp_audio_path):
                 os.remove(temp_audio_path)
-            if audio_format not in supported_formats and os.path.exists(f"{UPLOAD_FOLDER}/temp_audio.mp3"):
-                os.remove(f"{UPLOAD_FOLDER}/temp_audio.mp3")
             
-            return transcription.text
+            return transcription
         
         except Exception as e:
             logger.error(f"Error processing audio: {e}")
