@@ -374,9 +374,9 @@ def webhook():
         return str(resp), 200
     
     except Exception as e:
-        logger.error(f"Webhook error: {e}")
+        logger.error(f"Webhook error: {e}", exc_info=True)
         resp = MessagingResponse()
-        resp.message("❌ Sorry, an error occurred.")
+        resp.message(f"❌ Error: {str(e)[:100]}")  # Show first 100 chars of error
         return str(resp), 200
 
 @app.route('/health', methods=['GET'])
@@ -385,36 +385,34 @@ def health():
     return {"status": "healthy", "service": "whatsapp-bot-free"}, 200
 
 
+# Initialize bot on module load (for gunicorn)
+from dotenv import load_dotenv
+load_dotenv()
+
+# Load configuration from environment variables
+groq_api_key = os.getenv('GROQ_API_KEY')
+gemini_api_key = os.getenv('GEMINI_API_KEY')
+twilio_account_sid = os.getenv('TWILIO_ACCOUNT_SID')
+twilio_auth_token = os.getenv('TWILIO_AUTH_TOKEN')
+twilio_phone_number = os.getenv('TWILIO_PHONE_NUMBER')
+
+if not all([groq_api_key, gemini_api_key, twilio_account_sid, twilio_auth_token, twilio_phone_number]):
+    raise ValueError("Missing required environment variables. Check your .env file.")
+
+# Initialize bot
+bot = WhatsAppBotFree(
+    groq_api_key=groq_api_key,
+    gemini_api_key=gemini_api_key,
+    twilio_account_sid=twilio_account_sid,
+    twilio_auth_token=twilio_auth_token,
+    twilio_phone_number=twilio_phone_number
+)
+
+logger.info("FREE Bot initialized successfully!")
+
+
 def main():
-    """Initialize and run the bot"""
-    global bot
-    
-    # Load environment variables from .env file
-    from dotenv import load_dotenv
-    load_dotenv()
-    
-    # Load configuration from environment variables
-    groq_api_key = os.getenv('GROQ_API_KEY')
-    gemini_api_key = os.getenv('GEMINI_API_KEY')
-    twilio_account_sid = os.getenv('TWILIO_ACCOUNT_SID')
-    twilio_auth_token = os.getenv('TWILIO_AUTH_TOKEN')
-    twilio_phone_number = os.getenv('TWILIO_PHONE_NUMBER')
-    
-    if not all([groq_api_key, gemini_api_key, twilio_account_sid, twilio_auth_token, twilio_phone_number]):
-        raise ValueError("Missing required environment variables. Check your .env file.")
-    
-    # Initialize bot
-    bot = WhatsAppBotFree(
-        groq_api_key=groq_api_key,
-        gemini_api_key=gemini_api_key,
-        twilio_account_sid=twilio_account_sid,
-        twilio_auth_token=twilio_auth_token,
-        twilio_phone_number=twilio_phone_number
-    )
-    
-    logger.info("FREE Bot initialized successfully!")
-    
-    # Run Flask app
+    """Run Flask app directly (for local testing)"""
     port = int(os.getenv('PORT', 5000))
     logger.info(f"Starting server on port {port}")
     app.run(host='0.0.0.0', port=port, debug=False)
