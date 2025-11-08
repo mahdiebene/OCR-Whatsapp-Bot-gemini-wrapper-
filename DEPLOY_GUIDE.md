@@ -50,10 +50,10 @@ git push -u origin main
 In Render dashboard, go to **"Environment"** tab and add:
 
 ```
-GROQ_API_KEY = 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
-GEMINI_API_KEY = AIzaSyDQAFqGLpA92gP1a7JH0ymOX5Rw8mLoFIE
-TWILIO_ACCOUNT_SID = ACb13de664849583db7933403908612a46
-TWILIO_AUTH_TOKEN = f7eb7a69c553b33c851d25a9a1add1eb
+GROQ_API_KEY = your_groq_api_key_here
+GEMINI_API_KEY = your_gemini_api_key_here
+TWILIO_ACCOUNT_SID = your_twilio_account_sid
+TWILIO_AUTH_TOKEN = your_twilio_auth_token
 TWILIO_PHONE_NUMBER = whatsapp:+14155238886
 ```
 
