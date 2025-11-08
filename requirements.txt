@@ -16,7 +16,7 @@ google-generativeai==0.8.5
 pydub==0.25.1
 
 # Image Processing
-Pillow==10.1.0
+Pillow>=10.0.0
 
 # Additional utilities
 python-dotenv==1.0.0
