@@ -191,16 +191,15 @@ class WhatsAppBotFree:
                 return f"📄 *Text & Info:*\n\n{analysis}"
                     
             except Exception as vision_error:
-                logger.warning(f"Gemini Vision API error: {vision_error}")
+                logger.warning(f"Image analysis error: {vision_error}")
                 
                 # Fallback: Basic info + error message
                 return (
                     f"📸 *Image Received!*\n\n"
                     f"📏 Size: {width} x {height}\n"
                     f"📦 Format: {format_name}\n\n"
-                    f"⚠️ Vision API temporarily unavailable.\n"
-                    f"Error: {str(vision_error)}\n\n"
-                    f"💬 Please describe what's in the image, and I'll help analyze it!"
+                    f"⚠️ Image analysis temporarily unavailable.\n"
+                    f"Please try again in a moment."
                 )
         
         except Exception as e:
@@ -230,7 +229,7 @@ class WhatsAppBotFree:
             if not context:
                 context = [{
                     "role": "system",
-                    "content": "You are a helpful AI assistant in a WhatsApp bot. Be concise, friendly, and helpful. Keep responses brief since this is a messaging platform."
+                    "content": "You are a professional AI assistant. Provide direct, concise answers focused on the task at hand. No unnecessary information about what models you use or being free. Just do the work."
                 }]
             
             # Add user message
@@ -267,13 +266,12 @@ class WhatsAppBotFree:
             if body and num_media == 0:
                 # Check for commands
                 if body.lower() in ['/start', 'start', 'hello', 'hi']:
-                    response = ("👋 Hello! I'm your FREE AI WhatsApp assistant!\n\n"
-                               "Send me:\n"
-                               "📝 Text - Chat with me (powered by Llama 3)\n"
-                               "🎤 Audio - I'll transcribe it (FREE Whisper)\n"
-                               "🖼️ Image - Send it (basic info)\n\n"
-                               "Type /reset to clear conversation history\n\n"
-                               "🆓 100% FREE - No OpenAI needed!")
+                    response = ("👋 Hello! I'm your AI assistant.\n\n"
+                               "I can help you with:\n"
+                               "📝 Text - Chat and answer questions\n"
+                               "🎤 Audio - Transcribe voice messages\n"
+                               "🖼️ Image - Extract text and analyze content\n\n"
+                               "Type /reset to clear conversation history")
                     self.send_message(from_number, response)
                     return response
                 
