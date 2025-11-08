@@ -1,0 +1,23 @@
+# WhatsApp Bot FREE - Dependencies for Render.com Deployment
+
+# Web Framework
+flask==3.0.0
+requests==2.31.0
+gunicorn==21.2.0
+
+# Twilio for WhatsApp
+twilio==8.10.0
+
+# FREE AI Models
+groq==0.33.0
+google-generativeai==0.8.5
+
+# Audio Processing
+pydub==0.25.1
+
+# Image Processing
+Pillow==10.1.0
+
+# Additional utilities
+python-dotenv==1.0.0
+werkzeug==3.0.1
