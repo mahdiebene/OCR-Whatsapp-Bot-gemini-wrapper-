@@ -382,6 +382,125 @@ def health():
     """Health check endpoint"""
     return {"status": "healthy", "service": "whatsapp-bot-free"}, 200
 
+@app.route('/', methods=['GET'])
+def home():
+    """Homepage with status"""
+    html = """
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>WhatsApp AI Bot</title>
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 20px;
+            }
+            .container {
+                background: white;
+                border-radius: 20px;
+                padding: 40px;
+                max-width: 600px;
+                width: 100%;
+                box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            }
+            h1 {
+                color: #333;
+                font-size: 2.5em;
+                margin-bottom: 10px;
+            }
+            .status {
+                display: inline-block;
+                background: #10b981;
+                color: white;
+                padding: 8px 20px;
+                border-radius: 20px;
+                font-weight: 600;
+                margin-bottom: 30px;
+            }
+            .status::before {
+                content: "●";
+                margin-right: 8px;
+                animation: pulse 2s infinite;
+            }
+            @keyframes pulse {
+                0%, 100% { opacity: 1; }
+                50% { opacity: 0.5; }
+            }
+            .info {
+                background: #f3f4f6;
+                padding: 20px;
+                border-radius: 10px;
+                margin: 20px 0;
+            }
+            .info h2 {
+                color: #667eea;
+                font-size: 1.2em;
+                margin-bottom: 15px;
+            }
+            .feature {
+                display: flex;
+                align-items: center;
+                margin: 10px 0;
+                color: #555;
+            }
+            .feature::before {
+                content: "✓";
+                color: #10b981;
+                font-weight: bold;
+                margin-right: 10px;
+                font-size: 1.2em;
+            }
+            .phone {
+                background: #667eea;
+                color: white;
+                padding: 15px;
+                border-radius: 10px;
+                text-align: center;
+                font-size: 1.3em;
+                font-weight: 600;
+                margin-top: 20px;
+            }
+            .footer {
+                text-align: center;
+                color: #999;
+                margin-top: 30px;
+                font-size: 0.9em;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>🤖 WhatsApp AI Bot</h1>
+            <div class="status">ONLINE</div>
+            
+            <div class="info">
+                <h2>Capabilities</h2>
+                <div class="feature">Text conversation & questions</div>
+                <div class="feature">Voice message transcription</div>
+                <div class="feature">Image OCR & analysis</div>
+            </div>
+            
+            <div class="phone">
+                📱 +1 (415) 523-8886
+            </div>
+            
+            <div class="footer">
+                Powered by AI • Always Ready
+            </div>
+        </div>
+    </body>
+    </html>
+    """
+    return html, 200
+
 
 # Initialize bot on module load (for gunicorn)
 from dotenv import load_dotenv
